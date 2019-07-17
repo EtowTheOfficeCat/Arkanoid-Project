@@ -4,37 +4,49 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    [SerializeField] private float speed = 10f;
-    [SerializeField] private float maxStartnagleOffset = 5f;
-    [SerializeField] private float minstartAngelOffset = 0.25f;
     [Range(0f, 1f)] [SerializeField] private float playerBias = 0.25f;
     private Rigidbody rb;
+
     private Ship player;
+    public Ship Player { set => player = value; }
+
     private float startYpos;
+
     private Transform playerTransform;
+    public Transform PlayerTransform { set => playerTransform = value; }
 
     private Vector3 initialVel;
     private Vector3 lastFrameVel;
     private bool wasShot;
 
-    public void Shoot()
+    [SerializeField] private float defaultSpeed = 10f;
+    public float DefaultSpeed { get => defaultSpeed; }
+
+    private float speed;
+    public float Speed { get => speed; set => speed = value; }
+
+    public void Shoot(float minStartAngleOffset, float maxStartAngleOffset)
     {
         if(wasShot) { return;  }
         wasShot = true;
-        transform.parent = null;
+        transform.parent = player.BallParent;
+        rb = GetComponent<Rigidbody>();
         rb.isKinematic = false;
         float randSign = Mathf.Sign(Random.Range(-1, 1));
-        float angle = randSign * Random.Range(minstartAngelOffset, maxStartnagleOffset);
+        float angle = randSign * Random.Range(minStartAngleOffset, maxStartAngleOffset);
         Quaternion rot = Quaternion.AngleAxis(angle, Vector3.forward);
         rb.velocity = (rot * Vector3.up) * speed;
     }
 
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
     private void Start()
     {
+        speed = defaultSpeed;
         startYpos = transform.position.y;
-        rb = GetComponent<Rigidbody>();
-        playerTransform = transform.parent;
-        player = playerTransform.GetComponent<Ship>();
+        
     }
 
     private void Update()
@@ -69,7 +81,7 @@ public class Ball : MonoBehaviour
         rb.velocity = newDir * speed; 
     }
 
-    private void Reset()
+    public void Reset()
     {
         rb.isKinematic = true;
         rb.velocity = Vector3.zero;

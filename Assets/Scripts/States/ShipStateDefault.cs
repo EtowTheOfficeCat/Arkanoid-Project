@@ -5,17 +5,15 @@ using UnityEngine;
 [System.Serializable]
 public class ShipStateDefault : ShipState
 {
-    protected float speed;
+    protected float Ballspeed;
     protected float xInput;
-    protected Transform shipSize;
-
-
+    protected float speed = 5f;
+    protected float inputMultiplier = 1f;
+    
     public override Vector3 Velocity { get; protected set; }
 
     public override void OnStateEnter()
     {
-        speed = Ship.DefaultSpeed;
-        shipSize = Ship.DefaultShipSize;
         
     }
 
@@ -35,7 +33,7 @@ public class ShipStateDefault : ShipState
         xInput = Input.GetAxis("Horizontal");
         Vector3 newPos = Ship.transform.position;
 
-        Velocity = xInput * Time.deltaTime * speed * Vector3.right;
+        Velocity = inputMultiplier * xInput * Time.deltaTime * speed * Vector3.right;
         newPos += Velocity;
 
         if (newPos.x < -4)
@@ -57,7 +55,7 @@ public class ShipStateDefault : ShipState
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            Ship.Ball.Shoot();
+            Ship.Ball.Shoot(Ship.MinBallAngleOffset, Ship.MaxBallAngleOffset);
         }
 
 

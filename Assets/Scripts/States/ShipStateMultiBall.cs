@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShipStateMultiBall : MonoBehaviour
+public class ShipStateMultiBall : ShipStateDefault
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void OnStateEnter()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        for (int i = 0; i < 3; i++)
+        {
+            Ball ball = GameObject.Instantiate<Ball>(Ship.BallPrefab, Ship.Ball.transform.position, Quaternion.identity, Ship.BallParent );
+            ball.Player = Ship;
+            ball.PlayerTransform = Ship.transform;
+            ball.Speed = 10f;
+            ball.Shoot(0f, 360f);
+        }
     }
 }
