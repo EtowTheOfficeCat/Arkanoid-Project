@@ -1,71 +1,52 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Ship : MonoBehaviour
 {
-    //[SerializeField] private float defaultSpeed;
-    //public float DefaultSpeed { get => defaultSpeed; }
-    private Vector3 startPos;
-    [SerializeField] private Transform ballParent;
-    public Transform BallParent { get => ballParent; }
-
-    [SerializeField] private Ball ballPrefab;
-    public Ball BallPrefab { get => ballPrefab; }
-
-    [SerializeField] private float maxBallAngleOffset = 5f;
-    public float MaxBallAngleOffset => maxBallAngleOffset;
-
-    [SerializeField] private float minBallAngleOffset = 0.25f;
-    public float MinBallAngleOffset => minBallAngleOffset;
-
+    [SerializeField] private Vector3 defaultShipScale = new Vector3(1.2f, 0.324f, 1);
+    public Vector3 DefaultShipScale { get => defaultShipScale; }
     [SerializeField] private Transform shipMesh;
     public Transform ShipMesh { get => shipMesh; }
 
-    [SerializeField] private Vector3 defaultShipSize = new Vector3(1.5f, 0.4f, 1f);
-    public Vector3 DefaultShipSize { get => defaultShipSize; }
-
-    public Ball Ball { get; private set; }
+    public Ball Ball { get; set; }
     public ShipState currentState { get; private set; }
 
-void Start()
+
+    public void Init(Vector3 startPos)
     {
-        startPos = transform.position;
-        Ball = GetComponentInChildren<Ball>();
-        Ball.Player = this;
-        Ball.PlayerTransform = transform;
+        transform.position = startPos;
         SwitchState(new ShipStateDefault());
     }
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("expandPU"))
+    //    {
+    //    }
+    //}
 
     void Update()
     {
         currentState.OnUpdate();
+        // Test buttons
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SwitchState(new ShipStateFastShip());
+            SwitchState(new ShipStateFastship());
         }
-
-        
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             SwitchState(new ShipStateExpand());
         }
-
-        
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            SwitchState(new ShipStateFastBall());
+            SwitchState(new ShipStateFastball());
         }
-
-        
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             SwitchState(new ShipStateInputSwitch());
         }
-
-        if (Input.GetKeyDown(KeyCode.Alpha5))
+        if (Input.GetKeyDown(KeyCode.J))
         {
-            SwitchState(new ShipStateMultiBall());
+            SwitchState(new ShipStateMultiball());
         }
     }
 
@@ -77,9 +58,5 @@ void Start()
         currentState.OnStateEnter();
     }
 
-    public void Reset()
-    {
-        transform.position = startPos;
-        Ball.Reset();
-    }
 }
+
