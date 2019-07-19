@@ -104,3 +104,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1395f7e63df58884ca10cd5d910a322c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashDamageColor: {fileID: 2100000, guid: beef4e4d4dfb8ef45adc6103d4717b18, type: 2}
+  originalColor: {fileID: 2100000, guid: d0ad1f3d5d39913469dab6be361e7c29, type: 2}

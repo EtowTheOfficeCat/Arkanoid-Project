@@ -1,31 +1,43 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using TMPro;
 
 public class Game : MonoBehaviour
 {
+    
     [System.Serializable]
     private class Settings
     {
+        public TextMeshProUGUI scoreText = null;
+        public TextMeshProUGUI lifesText = null;
         public int StartNumShips = 3;
         public Vector3 ShipStartPos;
         public Ball BallPrefab;
         public float BallYOffset = 0.338f;
         public int NumMultiballs = 3;
+        
+
     }
     [SerializeField] private Settings settings;
-
+    
     private Ship ship;
     private Drain drain;
-    private int score;
     private int numShipsLeft;
     private Transform activeBalls;
     public Stack<Ball> BallPool { get; set; } = new Stack<Ball>(4);
+    public static int score = 0;
 
     void Awake()
     {
         Init();
     }
 
+    private void Update()
+    {
+        settings.scoreText.text = "" + Game.score;
+        settings.lifesText.text = "" + numShipsLeft;
+    }
     private void Init()
     {
         activeBalls = GameObject.Find("Active Balls").transform;

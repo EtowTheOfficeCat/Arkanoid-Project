@@ -12,6 +12,7 @@ public abstract class ShipState
 
 public class ShipStateDefault : ShipState
 {
+   
     protected float xInput;
     protected float speed = 10f;
     protected float inputMultiplier = 1f;
@@ -34,6 +35,7 @@ public class ShipStateDefault : ShipState
 
     private void Movement()
     {
+        
         xInput = inputMultiplier * Input.GetAxis("Horizontal");
         Vector3 newPos = Ship.transform.position;
 

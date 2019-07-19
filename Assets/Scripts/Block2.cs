@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Block : MonoBehaviour
+public class Block2 : MonoBehaviour
 {
+    [SerializeField] private int health = 2;
     [SerializeField] private Material flashDamageColor = null;
     [SerializeField] private Material originalColor = null;
 
@@ -12,12 +13,13 @@ public class Block : MonoBehaviour
     {
         meshRenderer = GetComponent<MeshRenderer>();
         originalColor = meshRenderer.material;
-        
+
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        Game.score++;
+        Game.score ++;
+        health--;
         StartCoroutine(Flash());
         
     }
@@ -28,9 +30,8 @@ public class Block : MonoBehaviour
 
         WaitForSeconds wait = new WaitForSeconds(0.1f);
         yield return wait;
-        Destroy(gameObject);
+        if (health == 0)
+            Destroy(gameObject);
         meshRenderer.material = originalColor;
     }
-
-    
 }
