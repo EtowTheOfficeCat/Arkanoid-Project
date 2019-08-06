@@ -1054,7 +1054,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xGap: 1
-  yGap: 1
+  yGap: 0.8
   blockPrefabs:
   - {fileID: 7380820971306548362, guid: 65c703ad83591e4448dc46f4294fd229, type: 3}
   - {fileID: 7754559313794933173, guid: 48366201634006a49b9e2249ed3a5d5e, type: 3}
