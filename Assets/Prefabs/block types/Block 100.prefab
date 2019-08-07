@@ -107,3 +107,4 @@ MonoBehaviour:
   flashDamageColor: {fileID: 2100000, guid: beef4e4d4dfb8ef45adc6103d4717b18, type: 2}
   originalColor: {fileID: 2100000, guid: e85e3c65de6e6c748876417e5667d5f0, type: 2}
   health: 4
+  Score: 100

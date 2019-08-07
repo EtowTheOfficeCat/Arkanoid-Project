@@ -7,6 +7,7 @@ public class Block : MonoBehaviour
     [SerializeField] private Material flashDamageColor = null;
     [SerializeField] private Material originalColor = null;
     [SerializeField] private int health = 1;
+    [SerializeField] private int Score = 1;
 
     private MeshRenderer meshRenderer = null;
     private void Awake()
@@ -18,7 +19,7 @@ public class Block : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Game.score++;
+        Game.score += Score;
         health--;
         StartCoroutine(Flash());
         
