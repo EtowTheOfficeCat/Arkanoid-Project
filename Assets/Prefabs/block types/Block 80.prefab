@@ -106,5 +106,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashDamageColor: {fileID: 2100000, guid: beef4e4d4dfb8ef45adc6103d4717b18, type: 2}
   originalColor: {fileID: 2100000, guid: 93a7734b7252a0a4f82bb343e4d720ee, type: 2}
-  health: 2
-  Score: 80
+  health: 1
+  Score: 1

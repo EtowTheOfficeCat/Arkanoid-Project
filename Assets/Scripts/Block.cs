@@ -20,11 +20,17 @@ public class Block : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        BlockHit?.Invoke(this);
-        Game.score += Score;
-        health--;
-        StartCoroutine(Flash());
-        
+        if(health > 0)
+        {
+            BlockHit?.Invoke(this);
+            Game.score += Score;
+            health--;
+            StartCoroutine(Flash());
+        }
+        else
+            StartCoroutine(FlashDie());
+
+
     }
 
     private IEnumerator Flash()
@@ -38,5 +44,16 @@ public class Block : MonoBehaviour
         meshRenderer.material = originalColor;
     }
 
-    
+    private IEnumerator FlashDie()
+    {
+        meshRenderer.material = flashDamageColor;
+
+        WaitForSeconds wait = new WaitForSeconds(0.1f);
+        yield return wait;
+        
+            Destroy(gameObject);
+        meshRenderer.material = originalColor;
+    }
+
+
 }

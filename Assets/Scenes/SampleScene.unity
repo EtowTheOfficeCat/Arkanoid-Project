@@ -572,23 +572,19 @@ MonoBehaviour:
   settings:
     scoreText: {fileID: 1827068271}
     lifesText: {fileID: 1784338581}
-    StartNumShips: 3
+    StartNumShips: 10
     ShipStartPos: {x: 0, y: 0, z: 0}
     BallPrefab: {fileID: 6134799194543177505, guid: 81b54c64a8f7b984d88cece846ac2900,
       type: 3}
-    BallYOffset: 0.338
+    BallYOffset: 0.3
     NumMultiballs: 3
     PowerUps:
     - {fileID: -2591544969102994238, guid: 14c639443ede2e043a03d36b6d8c040c, type: 3}
+    - {fileID: -2591544969102994238, guid: 38d6cfe2dcfa8984db053ee75006afdb, type: 3}
+    - {fileID: -2591544969102994238, guid: e62dcbbb3bed73c4fac40d273c5b3479, type: 3}
     - {fileID: -2591544969102994238, guid: 14c639443ede2e043a03d36b6d8c040c, type: 3}
-    - {fileID: -2591544969102994238, guid: 14c639443ede2e043a03d36b6d8c040c, type: 3}
-    - {fileID: -2591544969102994238, guid: 14c639443ede2e043a03d36b6d8c040c, type: 3}
-    - {fileID: -2591544969102994238, guid: 14c639443ede2e043a03d36b6d8c040c, type: 3}
-    - {fileID: -2591544969102994238, guid: 14c639443ede2e043a03d36b6d8c040c, type: 3}
-    - {fileID: -2591544969102994238, guid: 14c639443ede2e043a03d36b6d8c040c, type: 3}
-    - {fileID: -2591544969102994238, guid: 14c639443ede2e043a03d36b6d8c040c, type: 3}
-    - {fileID: -2591544969102994238, guid: 14c639443ede2e043a03d36b6d8c040c, type: 3}
-    - {fileID: -2591544969102994238, guid: 14c639443ede2e043a03d36b6d8c040c, type: 3}
+    - {fileID: -2591544969102994238, guid: 38d6cfe2dcfa8984db053ee75006afdb, type: 3}
+    - {fileID: -2591544969102994238, guid: e62dcbbb3bed73c4fac40d273c5b3479, type: 3}
 --- !u!4 &557523237
 Transform:
   m_ObjectHideFlags: 0
@@ -1064,7 +1060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37c49d8ebefb1554bada374d947313fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xGap: 1
+  xGap: 1.25
   yGap: 0.8
   blockPrefabs:
   - {fileID: 7380820971306548362, guid: 65c703ad83591e4448dc46f4294fd229, type: 3}
@@ -1079,7 +1075,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1325955229}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.45, y: 8.9, z: -0.18}
+  m_LocalPosition: {x: -4.35, y: 8.9, z: -0.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
