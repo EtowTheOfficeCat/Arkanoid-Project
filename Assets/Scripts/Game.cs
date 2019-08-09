@@ -5,7 +5,7 @@ using TMPro;
 
 public class Game : MonoBehaviour
 {
-    
+
     [System.Serializable]
     private class Settings
     {
@@ -16,8 +16,7 @@ public class Game : MonoBehaviour
         public Ball BallPrefab;
         public float BallYOffset = 0.338f;
         public int NumMultiballs = 3;
-        
-
+        public PowerUp[] PowerUps;
     }
     [SerializeField] private Settings settings;
     
@@ -27,6 +26,8 @@ public class Game : MonoBehaviour
     private Transform activeBalls;
     public Stack<Ball> BallPool { get; set; } = new Stack<Ball>(4);
     public static int score = 0;
+    private float PUSpawnScore = 300;
+    
 
     void Awake()
     {
@@ -47,6 +48,8 @@ public class Game : MonoBehaviour
         ShipStateMultiball.MultiballTriggered += OnMultiballTriggered;
         ship.Init(settings.ShipStartPos);
         numShipsLeft = settings.StartNumShips;
+        Block.BlockHit += OnBlockHit;
+
         for (int i = 0; i < settings.NumMultiballs + 1; i++)
         {
             Ball ball = Instantiate<Ball>(settings.BallPrefab);
@@ -61,6 +64,16 @@ public class Game : MonoBehaviour
     {
         drain.BallInDrain -= OnBallInDrain;
         ShipStateMultiball.MultiballTriggered -= OnMultiballTriggered;
+    }
+
+    public void OnBlockHit (Block block)
+    {
+        if(PUSpawnScore < score)
+        {
+            var randIdx = UnityEngine.Random.Range(0, settings.PowerUps.Length + 1);
+            Instantiate<PowerUp>(settings.PowerUps[randIdx], block.transform.position, Quaternion.identity);
+            PUSpawnScore += 500;
+        }
     }
 
     public void OnBallInDrain(Ball b)

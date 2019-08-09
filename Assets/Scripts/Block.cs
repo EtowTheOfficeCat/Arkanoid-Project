@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Block : MonoBehaviour
@@ -8,6 +8,7 @@ public class Block : MonoBehaviour
     [SerializeField] private Material originalColor = null;
     [SerializeField] private int health = 1;
     [SerializeField] private int Score = 1;
+    public static Action<Block> BlockHit;
 
     private MeshRenderer meshRenderer = null;
     private void Awake()
@@ -19,6 +20,7 @@ public class Block : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        BlockHit?.Invoke(this);
         Game.score += Score;
         health--;
         StartCoroutine(Flash());
