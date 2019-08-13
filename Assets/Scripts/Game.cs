@@ -1,55 +1,73 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine.UI;
-using TMPro;
+using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-
     [System.Serializable]
     private class Settings
     {
-        public TextMeshProUGUI scoreText = null;
-        public TextMeshProUGUI lifesText = null;
         public int StartNumShips = 3;
         public Vector3 ShipStartPos;
         public Ball BallPrefab;
         public float BallYOffset = 0.338f;
         public int NumMultiballs = 3;
+        public float MinTimeBetweenPUs = 5f;
+        public float MaxTimeBetweenPUs = 15f;
         public PowerUp[] PowerUps;
     }
     [SerializeField] private Settings settings;
-    
+
+    private class ShipStatePool
+    {
+        public ShipState[] shipStates = new[] {
+            new ShipStateDefault(),
+            new ShipStateExpand(),
+            new ShipStateFastship(),
+            new ShipStateMultiball(),
+        };
+    }
+    private ShipStatePool shipStatePool;
+
+    public static Action<int> ScoreChanged;
+    public static Action<int> NumShipChanged;
+    public static Action NewShip;
+
+    public Stack<Ball> BallPool { get; set; } = new Stack<Ball>(4);
     private Ship ship;
     private Drain drain;
+    private int score;
     private int numShipsLeft;
+    private float curTimeToPU;
+    private float puTimer;
     private Transform activeBalls;
-    public Stack<Ball> BallPool { get; set; } = new Stack<Ball>(4);
-    public static int score = 0;
-    private float PUSpawnScore = 300;
-    
+    private bool puSpawned;
 
-    void Awake()
+    private void Awake()
     {
         Init();
     }
 
     private void Update()
     {
-        settings.scoreText.text = "" + Game.score;
-        settings.lifesText.text = "" + numShipsLeft;
+        puTimer += Time.deltaTime;
     }
+
     private void Init()
     {
+        shipStatePool = new ShipStatePool();
         activeBalls = GameObject.Find("Active Balls").transform;
         drain = FindObjectOfType<Drain>();
         drain.BallInDrain += OnBallInDrain;
-        ship = FindObjectOfType<Ship>();
+        PowerUp.PUCollected += OnPUCollected;
+        PowerUp.PUDestroyed += OnPUDestroyed;
         ShipStateMultiball.MultiballTriggered += OnMultiballTriggered;
-        ship.Init(settings.ShipStartPos);
-        numShipsLeft = settings.StartNumShips;
         Block.BlockHit += OnBlockHit;
-
+        ship = FindObjectOfType<Ship>();
+        ship.Init(settings.ShipStartPos);
+        ship.SwitchState(shipStatePool.shipStates[(int)PU.None]);
+        numShipsLeft = settings.StartNumShips;
+        curTimeToPU = UnityEngine.Random.Range(settings.MinTimeBetweenPUs, settings.MaxTimeBetweenPUs);
         for (int i = 0; i < settings.NumMultiballs + 1; i++)
         {
             Ball ball = Instantiate<Ball>(settings.BallPrefab);
@@ -66,22 +84,34 @@ public class Game : MonoBehaviour
         ShipStateMultiball.MultiballTriggered -= OnMultiballTriggered;
     }
 
-    public void OnBlockHit (Block block)
+    public void OnBlockHit(Block block)
     {
-        if(PUSpawnScore < score)
+        score += block.Points;
+        ScoreChanged?.Invoke(score);
+        if (puTimer > curTimeToPU && !puSpawned && ship.currentState != shipStatePool.shipStates[(int)PU.Multiball])
         {
-            var randIdx = UnityEngine.Random.Range(0, settings.PowerUps.Length + 1);
+            puTimer = 0f; 
+            puSpawned = true;
+            var randIdx = UnityEngine.Random.Range(0, settings.PowerUps.Length );
             Instantiate<PowerUp>(settings.PowerUps[randIdx], block.transform.position, Quaternion.identity);
-            PUSpawnScore += 500;
         }
+    }
+
+    public void OnPUCollected(PU pu)
+    {
+        puSpawned = false;
+        ship.SwitchState(shipStatePool.shipStates[(int)pu]);
+    }
+
+    public void OnPUDestroyed()
+    {
+        puSpawned = false;
     }
 
     public void OnBallInDrain(Ball b)
     {
-        
         if (BallPool.Count < settings.NumMultiballs)
         {
-            
             // not last ball - put back in pool
             b.Init();
             b.gameObject.SetActive(false);
@@ -89,16 +119,19 @@ public class Game : MonoBehaviour
             b.transform.parent = ship.transform;
             if (BallPool.Count == settings.NumMultiballs)
             {
-                //ship.Ball = ship.GetComponentInChildren<Ball>();
                 ship.Ball = activeBalls.GetComponentInChildren<Ball>();
             }
         }
         else if (numShipsLeft > 0)
         {
+            // must be last ball
             numShipsLeft--;
+            NumShipChanged?.Invoke(numShipsLeft);
             ship.Init(settings.ShipStartPos);
             b.Init();
             SpawnOnShip(b);
+            ship.SwitchState(shipStatePool.shipStates[(int)PU.None]);
+            NewShip?.Invoke();
         }
         else
         {

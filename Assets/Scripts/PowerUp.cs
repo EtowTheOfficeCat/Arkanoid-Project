@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using UnityEngine;
 
 public class PowerUp : MonoBehaviour
@@ -8,7 +9,14 @@ public class PowerUp : MonoBehaviour
     [SerializeField] private PU puType;
     public PU PUType { get => puType; }
 
-   
+    private void OnEnable()
+    {
+        Game.NewShip += OnNewShip;
+    }
+    private void OnDisable()
+    {
+        Game.NewShip -= OnNewShip;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -18,9 +26,9 @@ public class PowerUp : MonoBehaviour
         }
         else
         {
-         Destroy(gameObject);
+            PUDestroyed?.Invoke();
         }
-        
+        Destroy(gameObject);
     }
 
     public void OnNewShip()

@@ -7,8 +7,10 @@ public class Block : MonoBehaviour
     [SerializeField] private Material flashDamageColor = null;
     [SerializeField] private Material originalColor = null;
     [SerializeField] private int health = 1;
-    [SerializeField] private int Score = 1;
+    [SerializeField] private int points = 1;
     public static Action<Block> BlockHit;
+    public int Points { get => points; }
+
 
     private MeshRenderer meshRenderer = null;
     private void Awake()
@@ -20,11 +22,10 @@ public class Block : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(health > 0)
+        BlockHit?.Invoke(this);
+        if (health > 0)
         {
-            BlockHit?.Invoke(this);
-            Game.score += Score;
-            health--;
+              health--;
             StartCoroutine(Flash());
         }
         else

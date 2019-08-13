@@ -10,9 +10,9 @@ public abstract class ShipState
     public abstract void OnUpdate();
 }
 
+
 public class ShipStateDefault : ShipState
 {
-   
     protected float xInput;
     protected float speed = 10f;
     protected float inputMultiplier = 1f;
@@ -21,6 +21,7 @@ public class ShipStateDefault : ShipState
 
     public override void OnStateEnter()
     {
+        Debug.Log("Ship switched to DefaultState!");
     }
 
     public override void OnStateExit()
@@ -35,7 +36,6 @@ public class ShipStateDefault : ShipState
 
     private void Movement()
     {
-        
         xInput = inputMultiplier * Input.GetAxis("Horizontal");
         Vector3 newPos = Ship.transform.position;
 
@@ -110,4 +110,3 @@ public class ShipStateMultiball : ShipStateDefault
         MultiballTriggered?.Invoke();
     }
 }
-
