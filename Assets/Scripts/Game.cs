@@ -15,6 +15,7 @@ public class Game : MonoBehaviour
         public float MinTimeBetweenPUs = 5f;
         public float MaxTimeBetweenPUs = 15f;
         public PowerUp[] PowerUps;
+        
     }
     [SerializeField] private Settings settings;
 
@@ -32,6 +33,7 @@ public class Game : MonoBehaviour
     public static Action<int> ScoreChanged;
     public static Action<int> NumShipChanged;
     public static Action NewShip;
+    public GameObject GameOverCanvas;
 
     public Stack<Ball> BallPool { get; set; } = new Stack<Ball>(4);
     private Ship ship;
@@ -135,7 +137,8 @@ public class Game : MonoBehaviour
         }
         else
         {
-            // GameOver
+            Time.timeScale = 0f;
+            GameOverCanvas.SetActive(true);
         }
     }
 

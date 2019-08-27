@@ -10,6 +10,7 @@ public class Block : MonoBehaviour
     [SerializeField] private int points = 1;
     public static Action<Block> BlockHit;
     public int Points { get => points; }
+    private Collider BlockCollider;
 
 
     private MeshRenderer meshRenderer = null;
@@ -17,6 +18,7 @@ public class Block : MonoBehaviour
     {
         meshRenderer = GetComponent<MeshRenderer>();
         originalColor = meshRenderer.material;
+        BlockCollider = GetComponent<Collider>();
         
     }
 
@@ -26,9 +28,12 @@ public class Block : MonoBehaviour
         if (health > 0)
         {
               health--;
+            BlockCollider.enabled = false;
             StartCoroutine(Flash());
+            
         }
         else
+            BlockCollider.enabled = false;
             StartCoroutine(FlashDie());
 
 
